@@ -1,6 +1,6 @@
 # Browser-Window-Management
 
-Prototype for autodiscovery of screens and support browser window management.
+Prototype for autodiscovery of screens and support browser window management for HTML anchor tags.
 
 ## Demo
 Checkout the code and run with a webserver or see [Live Demo](https://fuasmattn.github.io/window-management/). Open Developer Console for Info Logs and connect additional monitors.
@@ -10,6 +10,10 @@ Checkout the code and run with a webserver or see [Live Demo](https://fuasmattn.
 Builds upon the ScreenDetails API - check the compatibility table.
 https://developer.mozilla.org/en-US/docs/Web/API/ScreenDetails#browser_compatibility
 
-## Permissions
+### Apple Sidecar
 
-Requires the user to accept the `window-managment` (or former `window-placement`) permission.
+Using an iPad as additional display should work with chrome. However, the `ScreenDetails` change events do not fire when connecting or disconnecting the sidecar.
+
+### Permissions
+
+Requires the user to accept the `window-management` (or former `window-placement`) permission.
