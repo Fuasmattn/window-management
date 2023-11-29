@@ -2,6 +2,9 @@
 
 Prototype for autodiscovery of screens and support browser window management.
 
+## Demo
+Checkout the code and run with a webserver or see [Live Demo](https://fuasmattn.github.io/window-management/). Open Developer Console for Info Logs and connect additional monitors.
+
 ## Compatibility
 
 Builds upon the ScreenDetails API - check the compatibility table.
