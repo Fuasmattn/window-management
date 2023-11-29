@@ -1,9 +1,12 @@
 let windowObjectReference = null; // global variable
 let previousURL; /* global variable that will store the url currently in the secondary window */
+let cachedScreensLength;
 
 // basic map of target/screen
 const screenMap = {
+  primaryWindow: 0,
   secondaryWindow: 1,
+  tertiaryWindow: 2,
 };
 
 // https://developer.chrome.com/articles/window-management/
@@ -35,10 +38,29 @@ async function getWindowManagementPermissionState() {
   return state;
 }
 
+function registerScreenChangeListeners(screenDetails) {
+  screenDetails.addEventListener("screenschange", (event) => {
+    if (screenDetails.screens.length !== cachedScreensLength) {
+      console.info(
+        `The screen count changed from ${cachedScreensLength} to ${screenDetails.screens.length}`
+      );
+      cachedScreensLength = screenDetails.screens.length;
+    }
+  });
+
+  screenDetails.addEventListener("currentscreenchange", async (event) => {
+    const details = screenDetails.currentScreen;
+    console.info("The current screen has changed.", event, details);
+  });
+}
+
 async function openRequestedWindow(url, target) {
   const screenIndex = screenMap[target];
-  const { screens } = await window.getScreenDetails();
+  const screenDetails = await window.getScreenDetails();
 
+  registerScreenChangeListeners(screenDetails);
+
+  const { screens } = screenDetails;
   // fallback to default screen if screenIndex not discovered
   const screen =
     screens && screens.length >= screenIndex + 1
@@ -64,19 +86,41 @@ async function openRequestedWindow(url, target) {
      in the event of another call of this function. */
 }
 
-document.querySelector("button").addEventListener("click", async () => {
-  console.log("click");
-  const state = await getWindowManagementPermissionState();
-  const isExtended = window.screen.isExtended;
-  const screenDetails = await window.getScreenDetails();
+document
+  .querySelector("#fullscreen-btn")
+  .addEventListener("click", async () => {
+    try {
+      const primaryScreen = (await getScreenDetails()).screens.filter(
+        (screen) => screen.isPrimary
+      )[0];
+      await document.body.requestFullscreen({ screen: primaryScreen });
+    } catch (err) {
+      console.error(err.name, err.message);
+    }
+  });
 
-  document.querySelector("#permission").textContent = state;
-  document.querySelector(
-    "#isExtended"
-  ).textContent = `is extended: ${isExtended}`;
+document
+  .querySelector("#permission-btn")
+  .addEventListener("click", async () => {
+    const state = await getWindowManagementPermissionState();
+    const screenDetails = await window.getScreenDetails();
+    const isExtended = window.screen.isExtended;
 
-  console.log("Screen Details", screenDetails);
-});
+    document.querySelector(
+      "#permission"
+    ).textContent = `window-management/placement permission state: ${state}`;
+    document.querySelector(
+      "#isExtended"
+    ).textContent = `Monitor is extended: ${isExtended}`;
+
+    document.querySelector("#screenDetails").textContent = JSON.stringify(
+      screenDetails,
+      undefined,
+      1
+    );
+
+    console.log("Screen Details", screenDetails);
+  });
 
 // discover specific links and enhance functionality
 const secondaryLinks = document.querySelectorAll("a[target='secondaryWindow']");

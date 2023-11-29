@@ -6,28 +6,38 @@
     <title>Document</title>
   </head>
   <body>
-    <button>check permissions & monitors</button>
-    <pre id="permission"></pre>
-    <p id="isExtended"></p>
-    <pre id="screenDetails"></pre>
+    <h1>Browser Window Management</h1>
+    <p>
+      The links below will open in different windows and arrange them into
+      different screens - if connected. A basic autodiscovery will detect
+      connected screens.
+    </p>
+
     <p>
       <a href="#" target="self"> primary window </a>
     </p>
     <p>
       <a href="#secondary-foo" target="secondaryWindow">
-        open in secondary window
+        open in secondary screen
       </a>
     </p>
     <p>
       <a href="#secondary-bar" target="secondaryWindow">
-        open in secondary window
+        open in secondary screen
       </a>
     </p>
     <p>
       <a href="#tertiary-foo" target="tertiaryWindow">
-        open in tertiary window
+        open in tertiary screen
       </a>
     </p>
+
+    <button id="fullscreen-btn">request fullscreen for primary</button>
+    <button id="permission-btn">check permissions & monitors</button>
+    <pre id="permission"></pre>
+    <p id="isExtended"></p>
+    <p id="screenInfo"></p>
+    <pre id="screenDetails"></pre>
   </body>
   <script type="module" src="./index.js"></script>
 </html>
