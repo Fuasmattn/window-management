@@ -90,7 +90,7 @@ document
   .querySelector("#fullscreen-btn")
   .addEventListener("click", async () => {
     try {
-      const primaryScreen = (await getScreenDetails()).screens.filter(
+      const primaryScreen = (await window.getScreenDetails()).screens.filter(
         (screen) => screen.isPrimary
       )[0];
       await document.body.requestFullscreen({ screen: primaryScreen });
